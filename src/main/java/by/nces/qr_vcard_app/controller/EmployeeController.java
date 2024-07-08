@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.io.IOException;
+
 @Controller
 public class EmployeeController {
 
@@ -39,7 +41,7 @@ public class EmployeeController {
 
     @PostMapping("/processForm")
     public String processForm(@Valid @ModelAttribute("employee") Employee employee,
-                              BindingResult bindingResult) throws MessagingException {
+                              BindingResult bindingResult) throws MessagingException, IOException {
         if (bindingResult.hasFieldErrors()) {
             return "form";
         } else {

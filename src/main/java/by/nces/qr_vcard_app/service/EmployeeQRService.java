@@ -14,15 +14,14 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 @Service
 public class EmployeeQRService {
-
-    @Value("${app.qr.path}")
-    private String PATH;
 
     @Value("${app.qr.size}")
     private int SIZE;
@@ -49,13 +48,19 @@ public class EmployeeQRService {
             bitMatrix = new BitMatrix(100, 100);
         }
 
-        File dir = new File(PATH);
+//        if (!dir.exists()) {
+//            dir.mkdir();
+//        }
+//        File file = new File(PATH + employee.getFirstName() + "_" + employee.getLastName() + ".png");
+        String outputDir = System.getProperty("user.home") + "/qr-codes/";
+        File dir = new File(outputDir);
         if (!dir.exists()) {
             dir.mkdir();
         }
-        File file = new File(PATH + employee.getFirstName() + "_" + employee.getLastName() + ".png");
+        String fileName = employee.getFirstName() + "_" + employee.getLastName() + ".png";
+        Path filePath = Paths.get(outputDir, fileName);
         try {
-            MatrixToImageWriter.writeToPath(bitMatrix, "png", file.toPath());
+            MatrixToImageWriter.writeToPath(bitMatrix, "png", filePath);
         } catch (IOException e) {
             MatrixToImageWriter.toBufferedImage(bitMatrix);
         }
